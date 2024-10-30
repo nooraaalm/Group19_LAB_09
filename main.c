@@ -72,3 +72,17 @@ int samples[100] = {                                                       // DE
                      241,  162,   98,   51,   21,    9,   12,   27,   51,   80,
                      111,  140,  166,  189,  211,  235,  264,  303,  357,  431,
                      528,  651,  800,  974, 1170, 1382, 1604, 1829, 2047, 2252  };
+void WAVEFORM(void)                                       // DEFINE ANALOG WAVEFORM TO GENERATE
+{   int i;                                                // DEFINE VARIABLE i
+    while (1)
+    {
+    for ( i=0; i< 100; i++)                               // TAKE EACH SAMPLE OUT OF 100 SAMPLES TO SEND TO PERIPHERAL
+    {
+        AOUT(samples[i]);                                 // SEND ith SAMPLE TO PERIPHERAL
+        if (samples[i] > 4095)                            // RESET IF SAMPLE VALUE ABOVE MAXIMUM LIMIT
+        { samples[i] = 0;
+        }
+    }
+    delay(1000);                                          // DELAY TO CONTROL WAVEFORM FREQUENCY
+    }
+}
