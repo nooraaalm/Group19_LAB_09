@@ -17,4 +17,12 @@ void I2C0_init(void) {
     {                                                     // DELAY TO ENSURE CLOCK IS STABILIZED
     };
              // RELOAD VALUE FOR 1mS
- 
+  GPIO_PORTB_AFSEL_R |= 0x0C;                           // ENABLE ALERNATE FUNCTION FOR PB2 AND PB3
+    GPIO_PORTB_ODR_R |= 0x08;                             // ENABLE OPEN DRAIN ON SDA
+    GPIO_PORTB_DEN_R |= 0x0C;                             // ENABLE DIGITAL FOR PB2 AND PB3
+    GPIO_PORTB_PCTL_R &= ~0xFF00;                         // CLEAR PCTL
+    GPIO_PORTB_PCTL_R |= 0x3300;                          // I2C FUNCTIONALITY FOR PB2 AND PB3
+
+    I2C0_MCR_R = 0x10;                                    // I2C MASTER FUNCTION INITIALIZE
+    I2C0_MTPR_R = 0x07;                                   // SET CLOCK
+}
