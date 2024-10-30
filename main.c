@@ -26,3 +26,16 @@ void I2C0_init(void) {
     I2C0_MCR_R = 0x10;                                    // I2C MASTER FUNCTION INITIALIZE
     I2C0_MTPR_R = 0x07;                                   // SET CLOCK
 }
+void I2C0_SEND(uint8_t PERIPHERAL_ADDRESS, uint8_t ANALOG_SAMPLE_MSB, uint8_t ANALOG_SAMPLE_LSB) // DEFINE I2C0 SEND FUNCTION TO PERIPHERAL ADDRESS AND 12 BIT DATA
+{
+    I2C0_MSA_R = (PERIPHERAL_ADDRESS << 1);               // SET PERIPHERAL ADDRESS, WRITE
+    I2C0_MDR_R = ANALOG_SAMPLE_MSB;                       // MSB
+    I2C0_MCS_R = 0x03;                                    // SEND START AND RUN
+    while (I2C0_MCS_R & 0x01);                            // WAIT FOR TRANSMISSION TO FINISH
+    if (I2C0_MCS_R & 0x02) return;                        // RETURN IF ERROR OCCURS
+
+    I2C0_MDR_R = ANALOG_SAMPLE_LSB;                       // LSB
+    I2C0_MCS_R = 0x05;                                    // SEND START AND RUN
+    while (I2C0_MCS_R & 0x01);                            // WAIT FOR TRANSMISSION TO FINISH
+    if (I2C0_MCS_R & 0x02) return;                        // RETURN IF ERROR OCCURS
+}
