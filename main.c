@@ -39,3 +39,17 @@ void I2C0_SEND(uint8_t PERIPHERAL_ADDRESS, uint8_t ANALOG_SAMPLE_MSB, uint8_t AN
     while (I2C0_MCS_R & 0x01);                            // WAIT FOR TRANSMISSION TO FINISH
     if (I2C0_MCS_R & 0x02) return;                        // RETURN IF ERROR OCCURS
 }
+oid systick_setting(void)
+{
+    STRELOAD = SYSTICK_RELOAD_VALUE(1000);                // RELOAD VALUE FOR 1mS
+    STCTRL |= ENABLE | CLKINT;                            // ENABLE SYSTICK WITH SYSTEM CLOCK
+    STCURRENT = 0;                                        // CLEAR STCURRENT REGUSTER
+}
+void delay(int us)
+{
+    STRELOAD = SYSTICK_RELOAD_VALUE(us);                  // RELOAD VALUE FOR REQUIRED DELAY
+    STCURRENT = 0;                                        // CLEAR STCURRENT
+    STCTRL |= ENABLE | CLKINT;                            // ENABLE SYSTICK WITH SYSTEM CLOCK
+    while ((STCTRL & (1 << 16)) == 0);                    // WAIT FOR FLAG TO SET
+    STCTRL &= ~ENABLE;                                    // STOP TIMER
+}
