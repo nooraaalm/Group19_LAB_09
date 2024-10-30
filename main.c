@@ -86,3 +86,11 @@ void WAVEFORM(void)                                       // DEFINE ANALOG WAVEF
     delay(1000);                                          // DELAY TO CONTROL WAVEFORM FREQUENCY
     }
 }
+int main(void)
+{
+    systick_setting();                                    // SYSTICK SETUP
+    while (1)
+    {
+    WAVEFORM();                                           // WAVEFORM
+    }
+}
